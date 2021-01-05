@@ -30,13 +30,17 @@
           </el-table-column>
           <el-table-column prop="introduction" label="简介" width="200" align="center">
           </el-table-column>
+          <el-table-column label="歌曲管理" width="110" align="center">
+            <template slot-scope="scope">
+              <el-button size="mini" @click="songEdit(scope.row.id,scope.row.name)">歌曲管理</el-button>
+            </template>
+          </el-table-column>
           <el-table-column prop="sex" label="操作"  width="180" align="center">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" @click="handleDelete(scope.row)">删除</el-button>
+              <el-button size="mini"  type="danger" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
-
         </el-table>
       <div class="pagination">
         <el-pagination
@@ -178,13 +182,13 @@
             this.$axios.post("http://localhost:8888/singer/add",this.registerForm).then(function (data) {
               if(data.status==200){
                 _this.$notify({
-                  title: '修改成功',
+                  title: '新增成功',
                   type: 'success'
                 });
                 _this.getAllSinger();
               }else{
                 _this.$notify({
-                  title: '修改失败',
+                  title: '新增失败',
                   type: 'error'
                 });
               }
@@ -331,6 +335,10 @@
         },
         handleCurrentChange(val){
           this.currentPage=val;
+        },
+        //转向歌曲管理页面
+        songEdit(id,name){
+          this.$router.push({path:`/SongManage`,query:{id,name}});
         }
       }
     }

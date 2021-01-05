@@ -5,26 +5,38 @@
       <el-button type="primary" size="mini" @click="centerDialogVisible=true">添加歌曲</el-button>
       <el-button type="primary" size="mini" @click="batchDelete">批量删除</el-button>
     </div>
-    <el-table size="mini" border style="width: 100%" height="580px" :data="data" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="40"></el-table-column>
+    <el-table size="mini" border style="width: 100%" height="550px" :data="data" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="40" ></el-table-column>
       <el-table-column label="歌曲图片" width="110" align="center">
         <template slot-scope="scope">
           <div class="song-img">
             <img :src="getUrl(scope.row.pic)"  style="width: 100% " >
           </div>
-          <el-upload :action="uploadUrl(scope.row.id)" :before-upload="beforeSongAvatorUpload" :on-success="avatorUploadSuccess">
-            <el-button size="mini" type="primary" >上传图片</el-button>
-          </el-upload>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="歌名" width="120" align="center">
       </el-table-column>
       <el-table-column prop="introduction" label="专辑" width="200" align="center">
       </el-table-column>
-      <el-table-column   label="歌词" width="200" align="center">
-      <template slot-scope="scope">
-        {{scope.row.lyric}}
-      </template>
+      <el-table-column label="歌词" align="center" >
+        <template slot-scope="scope">
+          <ul style="height:100px;overflow:scroll;">
+            <li v-for="(item,index) in parseLyric(scope.row.lyric)" :key="index">
+              {{item}}
+            </li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="资源更新" align="center" width="120px">
+        <template slot-scope="scope">
+          <el-upload :action="uploadUrlForSongAcator(scope.row.id)" :before-upload="beforeSongAvatorUpload" :on-success="avatorUploadSuccess">
+            <el-button size="mini" type="primary" >图片更新</el-button>
+          </el-upload>
+          <br>
+          <el-upload :action="uploadUrlForSongSource(scope.row.id)"  :on-success="SongSourceUploadSuccess" accept=".mp3">
+            <el-button size="mini" type="primary" >歌曲更新</el-button>
+          </el-upload>
+        </template>
       </el-table-column>
       <el-table-column prop="sex" label="操作"  width="180" align="center">
         <template slot-scope="scope">
@@ -200,8 +212,11 @@
         })
       },
       //更新Url
-      uploadUrl(id){
+      uploadUrlForSongAcator(id){
         return `${this.$store.state.HOST}/song/updateSongAcator?id=${id}`
+      },
+      uploadUrlForSongSource(id){
+        return `${this.$store.state.HOST}/song/updateSongSource?id=${id}`
       },
 
       uploadMpUrl(){
@@ -224,6 +239,17 @@
           id:row.id,
         }
       },
+      //解析歌词
+      parseLyric(text){
+        let lines = text.split("\n");
+        let pattern = /\[\d{2}:\d{2}.(\d{3}|\d{2})\]/g;
+        let result = [];
+        for(let item of lines){
+          let value = item.replace(pattern,'');
+          result.push(value);
+        }
+        return result;
+      },
       //更新头像之前的校验
       beforeSongAvatorUpload(file){
         const isJPG = (file.type === 'image/jpeg')|| (file.type === 'image/png');
@@ -239,6 +265,22 @@
       },
       //上传图片成功之后要做的工作
       avatorUploadSuccess(res){
+        let _this = this;
+        if(res.status == 200){
+          _this.getAllSong();
+          _this.$notify({
+            title: '上传成功',
+            type: 'success'
+          });
+        }else{
+          _this.$notify({
+            title: '上传失败',
+            type: 'error'
+          });
+        }
+      },
+      //更新头像之后
+      SongSourceUploadSuccess(res){
         let _this = this;
         if(res.status == 200){
           _this.getAllSong();
@@ -355,4 +397,5 @@
     display: flex;
     justify-content: center;
   }
+
 </style>

@@ -47,7 +47,7 @@
             },
             {
               icon: 'el-icon-document',
-              index: 'SongManage',
+              index: 'SongListManage',
               title: '歌单管理',
             },
 

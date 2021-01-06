@@ -8,6 +8,7 @@ import SongManage from "../page/SongManage";
 import UserManage from "../page/UserManage";
 import Aside from "../view/Aside";
 import Header from "../view/Header";
+import SongListManage from "../page/SongListManage";
 Vue.use(Router)
 
 
@@ -44,6 +45,11 @@ export default new Router({
           component: SingerManage
         },
         {
+          path:'/SongListManage',
+          name: 'SongListManage',
+          component: SongListManage
+        },
+        {
           path:'/SongManage',
           name: 'SongManage',
           component: SongManage
@@ -54,6 +60,11 @@ export default new Router({
           component: UserManage
         },
       ]
+    },
+    {
+      path:'/SongAudio',
+      name:'SongAudio',
+      component:SongManage
     }
   ]
 })

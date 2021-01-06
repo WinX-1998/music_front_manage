@@ -81,7 +81,10 @@
     </el-dialog>-->
     <el-dialog title="添加歌曲" :visible.sync="centerDialogVisible" width="400px" center>
       <el-form :model="registerForm" ref="registerForm" label-width="80px">
-        <el-form-item prop="name" label="歌曲名" size="mini">
+        <el-form-item prop="singerId" label="歌曲名" size="mini" hidden >
+          <el-input v-model="registerForm.singerId" ref="registerFormSingId" ></el-input>
+        </el-form-item>
+        <el-form-item prop="name" label="歌曲名" size="mini" >
           <el-input v-model="registerForm.name" placeholder="歌曲名"></el-input>
         </el-form-item>
         <el-form-item prop="introduction" label="专辑" size="mini">
@@ -96,7 +99,7 @@
             :auto-upload="false"
             class="upload-demo"
             :action=uploadMpUrl()
-            :data="registerForm"
+            :data=this.registerForm
             :on-success="upFile"
             name="file"
             accept=".mp3"
@@ -107,7 +110,7 @@
       </el-form>
         <span slot="footer">
           <el-button size="mini" @click="centerDialogVisible=false">取消</el-button>
-          <el-button size="mini" @click="addSong('registerForm')">确定</el-button>
+          <el-button size="mini" @click="addSong(registerForm)">确定</el-button>
         </span>
     </el-dialog>
     <el-dialog title="修改歌手" :visible.sync="EditVisible" width="400px" center>
@@ -134,7 +137,7 @@
       <span slot="footer">
                 <el-button size="mini" @click="delVisible = false">取消</el-button>
                 <el-button size="mini" @click="deleteRow">确定</el-button>
-            </span>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -159,7 +162,7 @@
           lyric:'',
         },
         registerForm:{
-          singerId:this.singerId,
+          singerId:'',
           name:'',
           introduction:'',
           lyric:'',
@@ -192,21 +195,28 @@
       }
     },
     created() {
-      this.singerId = this.$route.query.id;
+      this.registerForm.singerId=this.$route.query.id;
+      this.singerId=this.$route.query.id;
       this.singerName = this.$route.query.name;
+      typeof console.log(this.singerId);
+      typeof console.log(this.singerName);
       this.getAllSong();
     },
     methods:{
-      addSong(registForm){
+      addSong(registerForm){
+        console.log(registerForm);
         this.$refs.uploads.submit();
       },
       //根据相对地址获取绝对地址
       getUrl(url){
         return `${this.$store.state.HOST}/${url}`
       },
+      test(){
+        console.log(this.singerId);
+      },
       getAllSong(){
         var _this=this;
-        this.$axios.get("http://localhost:8888/song/selectAllSongs").then(function (data) {
+        this.$axios.get("http://localhost:8888/song/selectSongsBySingerId/"+this.singerId).then(function (data) {
           _this.tableData=data.data;
           _this.templateData=data.data;
         })
@@ -365,13 +375,15 @@
           // 文件上传成功后的回调，比如一些提示信息或者页面跳转都写在这里
           this.$message.success(res.msg);
           this.centerDialogVisible=false;
+          this.$refs.registerForm.resetFields();
+          this.$refs.uploads.clearFiles();
           this.getAllSong();
         } else {
           this.$message.error(res.msg);
           let _this = this;
-          setTimeout(function() {
+       /*   setTimeout(function() {
             _this.$refs.uploads.clearFiles();
-          }, 1000);
+          }, 1000);*/
         }
       }
     }

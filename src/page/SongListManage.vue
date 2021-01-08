@@ -23,9 +23,9 @@
       </el-table-column>
       <el-table-column prop="introduction" label="简介" width="200" align="center">
       </el-table-column>
-      <el-table-column label="歌曲管理" width="110" align="center">
+      <el-table-column label="歌单管理" width="110" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" @click="songEdit(scope.row.id,scope.row.name)">歌曲管理</el-button>
+          <el-button size="mini" @click="songEdit(scope.row.id)">歌单管理</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="sex" label="操作"  width="180" align="center">
@@ -303,8 +303,8 @@
         this.currentPage=val;
       },
       //转向歌曲管理页面
-      songEdit(id,name){
-        this.$router.push({path:`/SongManage`,query:{id,name}});
+      songEdit(id){
+        this.$router.push({path:`/ListSongManage`,query:{id}});
       }
     }
   }

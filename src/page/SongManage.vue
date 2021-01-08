@@ -113,7 +113,7 @@
           <el-button size="mini" @click="addSong(registerForm)">确定</el-button>
         </span>
     </el-dialog>
-    <el-dialog title="修改歌手" :visible.sync="EditVisible" width="400px" center>
+    <el-dialog title="修改歌曲" :visible.sync="EditVisible" width="400px" center>
       <el-form :model="editForm" ref="editForm" label-width="80px">
         <el-form-item prop="name" label="歌曲名" size="mini">
           <el-input v-model="editForm.name" placeholder="歌曲名"></el-input>
@@ -130,7 +130,7 @@
           <el-button size="mini" @click="updateSong">确定</el-button>
         </span>
     </el-dialog>
-    <el-dialog title="删除歌手" :visible.sync="delVisible" width="300px" center>
+    <el-dialog title="删除歌曲" :visible.sync="delVisible" width="300px" center>
       <div align="center">删除不可恢复，是否确定删除？</div>
       <el-form :model="delForm" ref="editForm" label-width="80px">
       </el-form>
@@ -201,6 +201,7 @@
       typeof console.log(this.singerId);
       typeof console.log(this.singerName);
       this.getAllSong();
+      console.log(this.tableData);
     },
     methods:{
       addSong(registerForm){
@@ -217,8 +218,9 @@
       getAllSong(){
         var _this=this;
         this.$axios.get("http://localhost:8888/song/selectSongsBySingerId/"+this.singerId).then(function (data) {
-          _this.tableData=data.data;
-          _this.templateData=data.data;
+          console.log(data);
+          _this.tableData=data.data.object;
+          _this.templateData=data.data.object;
         })
       },
       //更新Url

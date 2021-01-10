@@ -34,4 +34,15 @@
     height: 70px !important;
   }
 
+  .el-main {
+    position: absolute;
+    left: 200px;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    overflow-y: scroll;
+  }
+
+
+
 </style>

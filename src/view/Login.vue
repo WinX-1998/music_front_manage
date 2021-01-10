@@ -4,7 +4,7 @@
     <div class="ms-login">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
+          <el-input v-model="ruleForm.adminName" placeholder="用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input type="password" v-model="ruleForm.password" placeholder="密码"></el-input>
@@ -23,7 +23,7 @@
       data: function(){
         return {
           ruleForm:{
-            username: "xin",
+            adminName: "xin",
             password: "123"
           },
           rules:{
@@ -41,8 +41,8 @@
           onSubmit(){
             console.log(111)
             var _this=this;
-            console.log(this.ruleForm.username)
-            this.$axios.post("http://localhost:8888/user/login",
+            console.log(this.ruleForm.adminName)
+            this.$axios.post("http://localhost:8888/admin/login",
               this.ruleForm)
               .then(function (response) {
               if(response.data==="success"){
@@ -50,7 +50,7 @@
                       message: '登录成功!',
                       type: 'success'
                   });
-                    localStorage.setItem("username",_this.ruleForm.username);
+                    localStorage.setItem("adminName",_this.ruleForm.adminName);
                     _this.$router.push("/Home");
             }else{
                     _this.$message({

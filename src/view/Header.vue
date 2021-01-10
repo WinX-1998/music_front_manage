@@ -16,7 +16,7 @@
         </div>
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
-                    {{userName}}
+                    {{adminName}}
                     <i class="el-icon-caret-bottom"></i>
                 </span>
           <el-dropdown-menu slot="dropdown">
@@ -38,8 +38,8 @@
         }
         },
         computed:{
-            userName(){
-                return localStorage.getItem("username");
+            adminName(){
+                return localStorage.getItem("adminName");
             }
         },
         methods:{
@@ -78,7 +78,7 @@
 
           handleCommand(command){
             if(command=='logout'){
-              localStorage.removeItem("userName");
+              localStorage.removeItem("adminName");
               this.$router.push("/");
             }
           }

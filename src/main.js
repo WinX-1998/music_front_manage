@@ -8,9 +8,10 @@ import ElementUI from 'element-ui';
 import './assets/css/main.css'
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from "axios";
-
+import VCharts from "v-charts";
 
 Vue.use(ElementUI);
+Vue.use(VCharts);
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 
